@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:t2410e_flutter/models/category.dart';
 import 'package:t2410e_flutter/screens/home/category_item.dart';
 
 class CategoryList extends StatefulWidget{
@@ -7,7 +9,28 @@ class CategoryList extends StatefulWidget{
   State<StatefulWidget> createState() => _StateCategoryList();
 }
 class _StateCategoryList extends State<CategoryList>{
-
+  List<Category> data = [];
+  Future<void> _fetchCategories() async{
+    try{
+      const url = "https://dummyjson.com/products/categories";
+      Response rs = await Dio().get(url);
+      final ls = rs.data as List;
+      setState(() {
+        data = ls.map((c)=>Category.fromJson(c)).toList();
+      });
+      // List<Category> cats = [];
+      // for(int i=0;i<ls.length;i++){
+      //   cats.add(Category.fromJson(ls[i]));
+      // }
+    }catch(e){
+      debugPrint(e.toString());
+    }
+  }
+  @override
+  void initState(){
+    super.initState();
+    _fetchCategories();
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -27,11 +50,11 @@ class _StateCategoryList extends State<CategoryList>{
           height: 200,
           child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 8,
+              itemCount: data.length,
               itemBuilder:(context,index){
                 return Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: CategoryItem(),
+                    child: CategoryItem(category: data[index]),
                 );
               }
           ),

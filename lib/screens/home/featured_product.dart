@@ -31,7 +31,7 @@ class _StateFeaturedProduct extends State<FeaturedProduct>{
                 itemBuilder: (context,index){
                   return Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: CategoryItem(),
+                    child: const Text("Demo"),
                   );
                 }
             ),
